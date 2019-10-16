@@ -115,10 +115,8 @@ abstract class AbstractHttp2StreamChannel extends DefaultAttributeMap implements
     private void handleWindowUpdateFrameFuture(ChannelFuture future) {
         Throwable cause = future.cause();
         if (cause != null) {
-            cause.printStackTrace();
             // Unwrap if needed
-            if ((cause instanceof Http2FrameStreamException
-                    || cause instanceof Http2Exception.StreamException) && cause.getCause() != null) {
+            if (cause instanceof Http2FrameStreamException && cause.getCause() != null) {
                 cause = cause.getCause();
             }
 
