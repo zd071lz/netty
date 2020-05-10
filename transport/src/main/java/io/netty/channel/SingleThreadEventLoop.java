@@ -91,13 +91,8 @@ public abstract class SingleThreadEventLoop extends SingleThreadEventExecutor im
     @Deprecated
     @Override
     public ChannelFuture register(final Channel channel, final ChannelPromise promise) {
-        if (channel == null) {
-            throw new NullPointerException("channel");
-        }
-        if (promise == null) {
-            throw new NullPointerException("promise");
-        }
-
+        ObjectUtil.checkNotNull(promise, "promise");
+        ObjectUtil.checkNotNull(channel, "channel");
         channel.unsafe().register(this, promise);
         return promise;
     }
@@ -118,7 +113,7 @@ public abstract class SingleThreadEventLoop extends SingleThreadEventExecutor im
             reject(task);
         }
 
-        if (wakesUpForTask(task)) {
+        if (!(task instanceof LazyRunnable) && wakesUpForTask(task)) {
             wakeup(inEventLoop());
         }
     }
@@ -159,9 +154,4 @@ public abstract class SingleThreadEventLoop extends SingleThreadEventExecutor im
     public int registeredChannels() {
         return -1;
     }
-
-    /**
-     * Marker interface for {@link Runnable} that will not trigger an {@link #wakeup(boolean)} in all cases.
-     */
-    interface NonWakeupRunnable extends SingleThreadEventExecutor.NonWakeupRunnable { }
 }
