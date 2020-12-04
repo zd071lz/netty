@@ -1,5 +1,5 @@
 /*
- * Copyright 2014 The Netty Project
+ * Copyright 2020 The Netty Project
  *
  * The Netty Project licenses this file to you under the Apache License,
  * version 2.0 (the "License"); you may not use this file except in compliance
@@ -13,26 +13,16 @@
  * License for the specific language governing permissions and limitations
  * under the License.
  */
-package io.netty.handler.codec.stomp;
+package io.netty.channel.kqueue;
 
-/**
- * STOMP command
- */
-public enum StompCommand {
-    STOMP,
-    CONNECT,
-    CONNECTED,
-    SEND,
-    SUBSCRIBE,
-    UNSUBSCRIBE,
-    ACK,
-    NACK,
-    BEGIN,
-    ABORT,
-    COMMIT,
-    DISCONNECT,
-    MESSAGE,
-    RECEIPT,
-    ERROR,
-    UNKNOWN
+import io.netty.channel.unix.tests.IovArrayTest;
+import org.junit.Assume;
+import org.junit.BeforeClass;
+
+public class KQueueIovArrayTest extends IovArrayTest {
+
+    @BeforeClass
+    public static void loadNative() {
+        Assume.assumeTrue(KQueue.isAvailable());
+    }
 }
